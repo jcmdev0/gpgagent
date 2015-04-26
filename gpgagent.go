@@ -128,7 +128,13 @@ func (c *Conn) GetPassphrase(pr *PassphraseRequest) (passphrase string, outerr e
 	if err == nil {
 		set("OPTION", "ttyname="+tty)
 	}
-	set("OPTION", "ttytype="+os.Getenv("TERM"))
+
+	ttyType := os.Getenv("TERM")
+	if len(ttyType) == 0 {
+		ttyType = "vt100"
+	}
+	set("OPTION", "ttytype="+ttyType)
+
 	opts := ""
 	if pr.NoAsk {
 		opts += "--no-ask "
