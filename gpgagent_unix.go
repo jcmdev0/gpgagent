@@ -19,11 +19,9 @@ func NewGpgAgentConn() (*Conn, error) {
 	if runtimeFilePath, err := xdg.RuntimeFile("gnupg/S.gpg-agent"); err == nil {
 		if _, err = os.Stat(runtimeFilePath); !errors.Is(err, os.ErrNotExist) {
 			sp = append(sp, runtimeFilePath)
-			fmt.Println("Using new gpg socket", sp[0])
 		}
 	}
 	if len(sp) == 0 {
-		fmt.Println("Using old gpg socket through GPG_AGENT_INFO")
 		sp = strings.SplitN(os.Getenv("GPG_AGENT_INFO"), ":", 3)
 		if len(sp) == 0 || len(sp[0]) == 0 {
 			return nil, ErrNoAgent
